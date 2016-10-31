@@ -7,9 +7,10 @@
     font-family: 'Helvetica';
     font-size: 20px;
     font-weight: bold;
-    background-color:green;
   }
-
+body{
+  background-image:url("https://s-media-cache-ak0.pinimg.com/564x/32/58/02/325802278fd6c42def678cdd85ffb18c.jpg");
+}
   #chat {
     padding: 0 5px;
     height: 100vh;
@@ -19,19 +20,24 @@
   }
 
   #messages {
+    border-radius:10px;
     overflow: auto;
+    background-color:lightblue;
   }
 
   .message {
     margin: 1em 0;
   }
 </style>
-
+<html lang="en">
+  <body>
 <div id="chat">
   <div id="messages"></div>
   <input disabled placeholder="Connecting..." id="newmessage"></input>
 </div>
-
+<button id="submit">Enter</button>
+</body>
+</html>
 <!-- Imports jQuery -->
 <script src='//ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js'>
 </script>
@@ -58,8 +64,20 @@
     'onerror': function() {}, // No-op.
     'onclose': function() {}, // No-op.
   };
-channel.open(handler);
+  var count = 0;
+if(count==10)
+{
+  alert("You have accumulated 10 messages!");
+}
 
+channel.open(handler);
+$("#submit").click(function()
+{
+  $.post('/send', {data:newmessage.val()});
+  newmessage.val('');
+  count++;
+  alert("You now have "+count+"messages.");
+});
 // Enter-button handler, i.e. send a message.
 newmessage.on('keypress', function(e) {
   if (e.key === 'Enter' && newmessage.val() !== '') {
